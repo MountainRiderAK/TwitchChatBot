@@ -57,7 +57,7 @@ class TwitchChatBot(object):
 
     async def connect(self):
         self.websocket = await websockets.connect(self.twitch_chat_websocket_uri)
-        await self.send_data(f"PASS {self.tmi_token}")
+        await self.send_data(f"PASS {self.tim_token}")
         await self.send_data(f"NICK {self.bot_nick}")
         if self.send_caps:
             for cap in self.cap_list:
