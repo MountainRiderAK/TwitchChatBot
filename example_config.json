@@ -1,0 +1,24 @@
+{
+    "HELP": [
+        "TIM_TOKEN: Go to the link in TIM_TOKEN to get your oauth credentials.",
+        "CLIENT_ID: Go to the link in CLIENT_ID to get your CLIENT_ID",
+        "BOT_NICK: Your BOT_NICK must be the account you use for your bot (e.g. AwesomeStreamerBot)",
+        "BOT_PREFIX: DO NOT change this",
+        "CHANNEL: The Twitch channel with the chat your bot will connect to (e.g. AwesomeStreamerTTV)",
+        "PUBLIC_URI: You will need a server with a public facing IP address to get follower notifications.",
+        "PUBLIC_URI: If you want to run this on a home computer, you will have to forward a port through your router.",
+        "TWITCH_API_BASE: This is the base URI of the Twitch API. If it changes, we only have to update one location.",
+        "HOST: This should be 0.0.0.0 so you can accept connections from outside your computer",
+        "PORT: You can use any port, but anything below 49152 is assigned by the IANA. See this link:",
+        "PORT: https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt"
+    ],
+    "TIM_TOKEN": "https://twitchapps.com/tmi/",
+    "CLIENT_ID": "https://dev.twitch.tv/console/apps/create",
+    "BOT_NICK": "BotAccountChannelName",
+    "BOT_PREFIX": "!",
+    "CHANNEL": "TwitchAccountChannelName",
+    "PUBLIC_URI": "http://host.domain.tld:49200/api/v1.0/new_follower",
+    "TWITCH_API_BASE": "https://api.twitch.tv/helix",
+    "HOST": "0.0.0.0",
+    "PORT": 49200
+}
