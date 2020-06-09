@@ -2,6 +2,10 @@
     "HELP": [
         "TIM_TOKEN: Go to the link in TIM_TOKEN to get your oauth credentials.",
         "CLIENT_ID: Go to the link in CLIENT_ID to get your CLIENT_ID",
+        "CLIENT_SECRET: Go to the link in CLIENT_SECRET, click on your application name, click New Secret.",
+        "CLIENT_SECRET: Put the result in your config.json file and DO NOT publish it to github (or anywhere).",
+        "CLIENT_SECRET: Publishing your CLIENT_SECRET might cause Twitch support to have an aneuryism.",
+        "CLIENT_SECRET: If Twitch support has an aneuryism, they won't be able to improve the documentation.",
         "BOT_NICK: Your BOT_NICK must be the account you use for your bot (e.g. AwesomeStreamerBot)",
         "BOT_PREFIX: DO NOT change this",
         "CHANNEL: The Twitch channel with the chat your bot will connect to (e.g. AwesomeStreamerTTV)",
@@ -14,6 +18,7 @@
     ],
     "TIM_TOKEN": "https://twitchapps.com/tmi/",
     "CLIENT_ID": "https://dev.twitch.tv/console/apps/create",
+    "CLIENT_SECRET": "https://dev.twitch.tv/console",
     "BOT_NICK": "BotAccountChannelName",
     "BOT_PREFIX": "!",
     "CHANNEL": "TwitchAccountChannelName",
