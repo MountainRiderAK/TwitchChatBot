@@ -19,6 +19,7 @@
 import requests
 
 from configuration import add_configuration
+import microsecond_logging
 
 
 def new_followers(previous_followers, current_followers):
@@ -32,6 +33,8 @@ def new_followers(previous_followers, current_followers):
 
 class TwitchChannelInterface(object):
     def __init__(self, channel, client_id):
+        self.logger = microsecond_logging.getLogger(__name__)
+        self.logger.setLevel(microsecond_logging.DEBUG)
         self.channel = channel
         self.client_id = client_id
         add_configuration(self)
@@ -39,15 +42,35 @@ class TwitchChannelInterface(object):
         self.channel_id = None
         self.follows = None
         self.new_follows = None
+        self.access_token = None
+
+    def get_access_token(self):
+        api_url = "https://id.twitch.tv/oauth2/token"
+        self.logger.debug(f"api_url = {api_url}")
+        payload = {
+            "client_id": self.client_id,
+            "client_secret": "0mhdlly4cxfnhxcbrn4q8ojyangzze",
+            "grant_type": "client_credentials",
+        }
+        self.logger.debug(f"payload = {payload}")
+        result = requests.post(api_url, data=payload)
+        if result.status_code == requests.codes.ok:
+            self.data = result.json()
+            self.access_token = self.data['access_token']
+        return self.access_token
 
     def get_id(self):
         api_url = f"{self.twitch_api_base}/users"
-        headers = {"Client-ID": self.client_id}
+        self.logger.debug(f"api_url = {api_url}")
+        access_token = self.get_access_token()
+        headers = {"Client-ID": self.client_id, "Authorization": f"Bearer {access_token}"}
+        self.logger.debug(f"headers = {headers}")
         payload = {"login": self.channel}
         result = requests.get(api_url, params=payload, headers=headers)
         if result.status_code == requests.codes.ok:
             self.data = result.json()
             self.channel_id = self.data['data'][0]['id']
+            self.logger.debug(f"self.channel_id = {self.channel_id}")
         return self.channel_id
 
     def get_follows(self):

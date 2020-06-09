@@ -62,9 +62,18 @@ class TwitchFollowServer(object):
                               'new_follower',
                               self.new_follower,
                               methods=['GET', 'POST'])
+        self.app.add_url_rule('/auth/twitch/callback',
+                              'oauth_handler',
+                              self.oauth_handler,
+                              methods=['GET', 'POST'])
         self.app.register_error_handler(400, self.bad_request)
         self.app.register_error_handler(404, self.not_found)
         self.app.register_error_handler(500, self.internal_server_error)
+
+    def oauth_handler(self):
+        self.logger.debug(f"Handling a request: {request}")
+        result = make_response(jsonify({'success': 'OAuth response'}), 202)
+        return result
 
     def new_follower(self):
         self.logger.debug(f"Handling a request: {request}")
@@ -111,15 +120,33 @@ class TwitchFollowServer(object):
 
 
 class TwitchWebhookInterface(object):
-    def __init__(self, logger):
+    def __init__(self, logger, follow_server):
         self.logger = logger
+        self.follow_server = follow_server
         add_configuration(self)
         self.webhooks_url = f"{self.twitch_api_base}/webhooks/hub"
         self.interface = TwitchChannelInterface(self.channel, self.client_id)
         self.user_id = self.interface.get_id()
+        self.data = None
+        self.access_token = None
+
+    def get_access_token(self):
+        api_url = "https://id.twitch.tv/oauth2/token"
+        self.logger.debug(f"api_url = {api_url}")
+        payload = {
+            "client_id": self.client_id,
+            "client_secret": "0mhdlly4cxfnhxcbrn4q8ojyangzze",
+            "grant_type": "client_credentials",
+        }
+        self.logger.debug(f"payload = {payload}")
+        result = requests.post(api_url, data=payload)
+        if result.status_code == requests.codes.ok:
+            self.data = result.json()
+            self.access_token = self.data['access_token']
+        return self.access_token
 
     def subscribe(self):
-        headers = {"Client-ID": self.client_id}
+        headers = {"Client-ID": self.client_id, "Authorization": f"Bearer {self.interface.access_token}"}
         data = {
             "hub.mode": "subscribe",
             "hub.topic": f"{self.twitch_api_base}/users/follows?first=1&to_id={self.user_id}",
@@ -145,7 +172,7 @@ def start_server_and_subscribe(logger=None, chatbot=None):
     logger.debug("Sleeping to allow server to start...")
     time.sleep(1.0)
     logger.debug("Subscribing to follower notifications...")
-    twitch_webhook_interface = TwitchWebhookInterface(logger)
+    twitch_webhook_interface = TwitchWebhookInterface(logger, twitch_follow_server)
     twitch_webhook_interface.subscribe()
     return twitch_follow_server
 
