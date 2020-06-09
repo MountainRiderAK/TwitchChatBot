@@ -135,7 +135,7 @@ class TwitchWebhookInterface(object):
         self.logger.debug(f"api_url = {api_url}")
         payload = {
             "client_id": self.client_id,
-            "client_secret": "0mhdlly4cxfnhxcbrn4q8ojyangzze",
+            "client_secret": self.client_secret,
             "grant_type": "client_credentials",
         }
         self.logger.debug(f"payload = {payload}")
