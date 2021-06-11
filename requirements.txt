@@ -1,5 +1,5 @@
 Flask==1.1.1
 pyttsx3==2.71
 requests==2.22.0
-websockets==8.1
+websockets==9.1
 WSGIserver==1.3
